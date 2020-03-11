@@ -1,10 +1,12 @@
 import React from 'react';
 import {Modal} from 'antd';
 import Quiz from './quiz';
+import Header from './header';
 
 class Game extends React.Component{
 
   _isMounted = false;
+  
   constructor(props){
     super(props);
     
@@ -13,7 +15,8 @@ class Game extends React.Component{
       score: 0,
       time: 0,
       countdown: 5,
-
+      updateQuiz: false,
+      prevTime: 0,
     }
 
   }
@@ -25,7 +28,7 @@ class Game extends React.Component{
 
   componentWillUnmount(){
     this._isMounted = false;
-    this.clearInterval(this.counter)
+    clearInterval(this.counter)
   }
   
   startTimer = (changeState=true)=>{
@@ -43,6 +46,7 @@ class Game extends React.Component{
   timer = ()=> {
     this.setState((prevState)=>({
       countdown: prevState.countdown-1,
+      time : prevState.prevTime + 5 - prevState.countdown + 1,
     }
     ))
     if(this.state.countdown===0){
@@ -53,47 +57,57 @@ class Game extends React.Component{
     }
   }
 
-  showModal = () => {
-    this.setState({
-      isGameOver:true,
-    })
-  }
-
-  handleCancel = () => {
+  reset = () => {
     this.setState({
       isGameOver:false,
       countdown: 5,
       time: 0,
+      score: 0,
     })
     this.startTimer(false);
   }
 
-  onAnswerClick = ()=>{
-    this.setState((prevState)=>({
-      score: prevState.score+1
-    }))
+  onAnswerClick = (clickedOption, answer)=>{
+    if(clickedOption===answer){
+      clearInterval(this.counter)
+      this.setState((prevState)=>({
+        isGameOver: false,
+        score : prevState.score+1,
+        updateQuiz : true,
+        time : prevState.time + 5 - prevState.countdown,
+        prevTime : prevState.time,
+        countdown: 5,
+      }));
+      this.startTimer(false);
+    }
+    else{
+      clearInterval(this.counter)
+      this.setState({
+        isGameOver: true,
+      })
+    }
   }
 
   render(){
     return (
       <div>
-      {this.state.isGameOver &&
+        {!this.state.isGameOver && 
+        <div>
+        <Header countdown= {this.state.countdown} time = {this.state.time} score = {this.state.score}/>
+        <Quiz onAnswerClick = {this.onAnswerClick} update = {this.state.updateQuiz} />
+        </div>
+     
+            }      
       <Modal
           title="Game Over"
-          visible={true}
-          onOk={this.handleCancel}
-          onCancel={this.handleCancel}
+          visible={this.state.isGameOver}
+          onOk={this.reset}
+          onCancel={this.reset}
       >
         <p>Total time taken: {this.state.time}</p>
         <p>Score: {this.state.score}</p>
-      </Modal>}
-      <div style={{ position: 'fixed', zIndex: 1, width: '100%', padding:'20px' }}>
-      <span style={{padding:'30px'}}>Time Left: {this.state.countdown}</span>
-      <span style={{padding:'30px'}}>Time: {this.state.time}</span>
-      <span style={{padding:'30px'}}>Score: {this.state.score}</span>
-      <Quiz onAnswerClick = {this.onAnswerClick} />
-      <div />     
-    </div>
+      </Modal>
+      
     </div>
     )
   }
