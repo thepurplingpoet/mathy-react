@@ -5,7 +5,7 @@ class Quiz extends React.Component{
 
   constructor(props){
     super(props);
-    const question = getQuestion();
+    const question = getQuestion(props.level);
     const answer = getAnswer(question);
     const options = getOptions(answer);
     this.state = {
@@ -16,11 +16,27 @@ class Quiz extends React.Component{
   
   }
 
+  static getDerivedStateFromProps(nextProps, prevState){
+    if(nextProps.update===true){
+      const question = getQuestion();
+      const answer = getAnswer(question);
+      const options = getOptions(answer);
+    
+      return {
+        question,
+        answer,
+        options,
+      }
+   }
+   else return null;
+ }
+
   onAnswer = (e) =>{
     this.props.onAnswerClick(String(e.target.textContent), String(this.state.answer));
   }
 
   render(){
+    if(this.props.updateQuiz===true)this.forceUpdate();
    return(
     <Card>  
        <List

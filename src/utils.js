@@ -3,6 +3,7 @@
   }
 
   function getOperand(level=1){
+    console.log(level);
       return Math.floor(Math.random()*Math.pow(10, level))
   }
     
