@@ -2,9 +2,8 @@
     return `${getOperand(level)} ${getOperator()} ${getOperand(level)}`;
   }
 
-  function getOperand(level=1){
-    console.log(level);
-      return Math.floor(Math.random()*Math.pow(10, level))
+  function getOperand(level){
+    return Math.max(Math.floor(Math.random()*Math.pow(10, level)), 1)
   }
     
   function getOperator(){
@@ -33,7 +32,7 @@
 
   export function getAnswer(question){
       // eslint-disable-next-line no-eval
-      return eval(question);
+      return Math.round(eval(question));
   }
 
   function shuffle(array){

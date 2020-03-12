@@ -18,7 +18,7 @@ class Quiz extends React.Component{
 
   static getDerivedStateFromProps(nextProps, prevState){
     if(nextProps.update===true){
-      const question = getQuestion();
+      const question = getQuestion(nextProps.level);
       const answer = getAnswer(question);
       const options = getOptions(answer);
     
@@ -36,7 +36,6 @@ class Quiz extends React.Component{
   }
 
   render(){
-    if(this.props.updateQuiz===true)this.forceUpdate();
    return(
     <Card>  
        <List

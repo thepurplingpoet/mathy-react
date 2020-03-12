@@ -16,7 +16,6 @@ class Game extends React.Component{
       time: 0,
       countdown: 5,
       updateQuiz: false,
-      prevTime: 0,
       level: 1,
     }
 
@@ -48,7 +47,7 @@ class Game extends React.Component{
     this.setState((prevState)=>({
       updateQuiz: false,
       countdown: prevState.countdown-1,
-      time : prevState.prevTime + 5 - prevState.countdown + 1,
+      time : prevState.time + 1,
     }
     ))
     if(this.state.countdown===0){
@@ -65,6 +64,7 @@ class Game extends React.Component{
       countdown: 5,
       time: 0,
       score: 0,
+      level: 1,
     })
     this.startTimer(false);
   }
@@ -77,8 +77,7 @@ class Game extends React.Component{
         isGameOver: false,
         score : prevState.score+1,
         updateQuiz : true,
-        time : prevState.time + 5 - prevState.countdown,
-        prevTime : prevState.time,
+        time : prevState.time,
         countdown: 5,
         level : prevState.score < 5 ? 1 : (prevState.score <10 ? 2 : 3),
       }));
