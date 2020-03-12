@@ -1,3 +1,5 @@
+A simple app to test your arithmetic skills, inspired by [this project](https://github.com/pankajladhar/speedy-math).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
